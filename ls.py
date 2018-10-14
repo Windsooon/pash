@@ -10,23 +10,20 @@ class LS:
         self.args = args
 
     def run(self):
-        if self.args.list_subdir:
-            data = self._list_subdir(self.args.path)
-            self.long_format(data)
-        else:
-            data = self._show_and_sort(self.args.path)
-            self.long_format(data)
+        data = self._list_subdir(self.args.path)
+        self.long_format(data)
 
     def _list_subdir(self, path):
         lst = self._show_and_sort(path)
         yield path
         yield lst
-        for file in lst:
-            sub_path = os.path.join(path, file)
-            if os.path.isdir(sub_path):
-                # If the dir not empty
-                if os.listdir(sub_path):
-                    yield from self._list_subdir(sub_path)
+        if self.args.list_subdir:
+            for file in lst:
+                sub_path = os.path.join(path, file)
+                if os.path.isdir(sub_path):
+                    # If the dir not empty
+                    if os.listdir(sub_path):
+                        yield from self._list_subdir(sub_path)
 
     def _show_and_sort(self, path):
         if self.args.show_hidden:
@@ -48,16 +45,28 @@ class LS:
 
     def long_format(self, data):
         for d in data:
-            if isinstance(d, list):
+            if not isinstance(d, list):
+                print(d)
+            else:
                 self._long_format(d)
         else:
             pass
 
     def _long_format(self, data):
         if self.args.long_format:
-            pass
+            for d in data:
+                self._get_info(d)
         else:
-            pass
+            width = max(40, len(max(data, key=lambda k: len(k))))
+            for k, v in enumerate(data):
+                if k % 3 == 2 or k == len(data)-1:
+                    print('{:<{width}}'.format(v, width=width))
+                else:
+                    print('{:<{width}}'.format(v, width=width), end='')
+            print()
+
+    def _get_info(self, file):
+        pass
 
 
 program = LS(args)
