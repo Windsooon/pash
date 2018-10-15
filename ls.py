@@ -12,12 +12,25 @@ class LS:
         para args: args input like -l, -a, -R
         '''
         self.args = args
-        # Get generator depend on args input
-        # ── foo
-        #    ├── bar
-        #    ├── hello
-        # return generator -> ('/foo/', ['/bar', '/hello'])...
-        data = self._list_subdir(self.args.path)
+
+    def get_and_display(self):
+        data = self.get_data()
+        self.display(data)
+
+    def get_data(self):
+        '''
+        para path: path run ls command
+
+        Get data from path
+        '''
+        return self._list_subdir(self.args.path)
+
+    def display(self, data):
+        '''
+        para data: data to display
+
+        Display data
+        '''
         self.choose_format(data)
 
     def _list_subdir(self, path):
@@ -27,6 +40,11 @@ class LS:
         First: Show and sort dirs in root path by _show_and_sort function
         Second: Recursion yield generator
         '''
+        # Get generator depend on args input
+        # ── foo
+        #    ├── bar
+        #    ├── hello
+        # return generator -> ('/foo/', ['/bar', '/hello'])...
         lst = self._show_and_sort(path)
         yield (path, lst)
         if self.args.list_subdir:
@@ -113,4 +131,5 @@ class LS:
         print('{0:<12}{1:<4}{2:<10}{3:<10}{4:>4}{5:^15}{6:<10}'.format(*info))
 
 
-program = LS(args)
+p = LS(args)
+p.get_and_display()
