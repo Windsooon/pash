@@ -11,6 +11,10 @@ class LS:
         '''
         para args: args input like -l, -a, -R
         '''
+        try:
+            args.path
+        except AttributeError:
+            args.path = os.getcwd()
         self.args = args
 
     def get_and_display(self):
@@ -105,7 +109,7 @@ class LS:
             self._get_info(data)
         else:
             data = data[1]
-            width = max(40, len(max(data, key=lambda k: len(k))))
+            width = max(26, len(max(data, key=lambda k: len(k))))
             for k, v in enumerate(data):
                 if k % 3 == 2 or k == len(data)-1:
                     print('{:<{width}}'.format(v, width=width))
