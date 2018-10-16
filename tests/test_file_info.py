@@ -53,7 +53,3 @@ class FileInfoTestCase(unittest.TestCase):
 
     def test_basename(self):
         self.assertEqual('file.txt', self.name)
-
-
-if __name__ == '__main__':
-    unittest.main()
