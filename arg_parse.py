@@ -1,3 +1,4 @@
+import os
 import argparse
 
 
@@ -22,3 +23,7 @@ parser.add_argument(
         '-R', action='store_true',
         dest='list_subdir',
         help='list subdirectories recursively')
+
+args = parser.parse_args()
+if not args.path:
+    args.path = os.getcwd()
