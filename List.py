@@ -7,8 +7,6 @@ class LS:
         '''
         para args: args input like -l, -a, -R
         '''
-        if not args.path:
-            args.path = os.getcwd()
         self.args = args
 
     def get_and_display(self):
@@ -29,7 +27,7 @@ class LS:
 
         Display data
         '''
-        self.choose_format(data)
+        self._choose_format(data)
 
     def _list_subdir(self, path):
         '''
@@ -43,30 +41,31 @@ class LS:
         #    ├── bar
         #    ├── hello
         # return generator -> ('/foo/', ['/bar', '/hello'])...
-        lst = self._show_and_sort(path)
-        yield (path, lst)
+        lst = self._show_hidden_files(path)
+        sorted_lst = self._sort_by_size(path, lst)
+        yield (path, sorted_lst)
         if self.args.list_subdir:
-            for file in lst:
-                sub_path = os.path.join(path, file)
-                if os.path.isdir(sub_path):
-                    # If the dir not empty
-                    if os.listdir(sub_path):
-                        yield from self._list_subdir(sub_path)
+            for file in sorted_lst:
+                if file not in ('.', '..'):
+                    sub_path = os.path.join(path, file)
+                    if os.path.isdir(sub_path):
+                        # If the dir not empty
+                        if os.listdir(sub_path):
+                            yield from self._list_subdir(sub_path)
 
-    def _show_and_sort(self, path):
+    def _show_hidden_files(self, path):
         '''
         para args: full_path to run ls command
 
         Show hidden files and sort files depend on args input
         '''
         if self.args.show_hidden:
-            lst = os.listdir(path) + ['.', '..']
+            return os.listdir(path) + ['.', '..']
         else:
-            lst = [
+            return [
                 file for file in os.listdir(path)
                 if not file.startswith('.')
             ]
-        return self._sort_by_size(path, lst)
 
     def _sort_by_size(self, path, lst):
         '''
@@ -78,11 +77,12 @@ class LS:
         if self.args.sort_by_size:
             return sorted(
                 lst,
-                key=lambda f: os.path.getsize(os.path.join(path, f)))
+                key=lambda f: os.path.getsize(os.path.join(path, f)),
+                reverse=True)
         else:
             return sorted(lst)
 
-    def choose_format(self, gen):
+    def _choose_format(self, gen):
         '''
         para gen: generator ('/foo/', ['/bar', '/hello'])...
 
@@ -92,9 +92,10 @@ class LS:
             if self.args.list_subdir:
                 # Display path before file
                 print(g[0])
-            self._choose_format(g)
+            self._format_data(g)
+            print()
 
-    def _choose_format(self, data):
+    def _format_data(self, data):
         '''
         para: data like ('/foo/', ['/bar', '/hello'])
 
