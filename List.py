@@ -7,9 +7,7 @@ class LS:
         '''
         para args: args input like -l, -a, -R
         '''
-        try:
-            args.path
-        except AttributeError:
+        if not args.path:
             args.path = os.getcwd()
         self.args = args
 
@@ -103,32 +101,41 @@ class LS:
         Display long format or not
         '''
         if self.args.long_format:
-            file_info = self._get_info(data)
-            self._format_info(file_info)
+            for d in data[1]:
+                f = FileInfo(os.path.join(data[0], d))
+                file_info = self._long_info(f)
+                self._format_long_info(file_info)
         else:
-            data = data[1]
-            width = max(26, len(max(data, key=lambda k: len(k))))
-            for k, v in enumerate(data):
-                if k % 3 == 2 or k == len(data)-1:
-                    print('{:<{width}}'.format(v, width=width))
-                else:
-                    print('{:<{width}}'.format(v, width=width), end='')
-            print()
+            self._short_info(data)
 
-    def _get_info(self, data):
+    def _long_info(self, f):
+        '''
+        para: file file path
+
+        Get file long info
+        '''
+        return (
+            f.permission, f.link,
+            f.owner, f.group,
+            f.size, f.modi_time, f.name)
+
+    def _short_info(self, data):
         '''
         para: data like ('/foo/', ['/bar', '/hello'])
 
-        Get file info
+        Get file short info
         '''
-        for d in data[1]:
-            f = FileInfo(os.path.join(data[0], d))
-            return (
-                f.permission, f.link,
-                f.owner, f.group,
-                f.size, f.modi_time, f.name)
+        data = data[1]
+        width = max(26, len(max(data, key=lambda k: len(k))))
+        for k, v in enumerate(data):
+            # Show three column in a row
+            if k % 3 == 2 or k == len(data)-1:
+                print('{:<{width}}'.format(v, width=width))
+            else:
+                print('{:<{width}}'.format(v, width=width), end='')
+        print()
 
-    def _format_info(self, info):
+    def _format_long_info(self, info):
         '''
         Format output to terminal
         '''
