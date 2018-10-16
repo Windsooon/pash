@@ -1,4 +1,5 @@
 import os
+import glob
 from file_info import FileInfo
 
 
@@ -8,6 +9,10 @@ class LS:
         para args: args input like -l, -a, -R
         '''
         self.args = args
+
+    @staticmethod
+    def dir_empty(path):
+        return glob.glob(os.path.join(path, '*'))
 
     def get_and_display(self):
         data = self.get_data()
@@ -48,9 +53,7 @@ class LS:
             for file in sorted_lst:
                 if file not in ('.', '..'):
                     sub_path = os.path.join(path, file)
-                    if os.path.isdir(sub_path):
-                        # If the dir not empty
-                        if os.listdir(sub_path):
+                    if os.path.isdir(sub_path) and self.dir_empty(sub_path):
                             yield from self._list_subdir(sub_path)
 
     def _show_hidden_files(self, path):
@@ -134,7 +137,6 @@ class LS:
                 print('{:<{width}}'.format(v, width=width))
             else:
                 print('{:<{width}}'.format(v, width=width), end='')
-        print()
 
     def _format_long_info(self, info):
         '''
