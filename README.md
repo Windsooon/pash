@@ -5,7 +5,7 @@ Implement Bash ls command using Python
 
 ## Quickstart
     
-    git@github.com:Windsooon/pash.git
+    git clone git@github.com:Windsooon/pash.git
     cd pash
     python3 ls.py -lS
     # Other Examples
@@ -28,9 +28,10 @@ Implement Bash ls command using Python
 
     pip3 install pash
 
-    >>> import pash_src
-    >>> pash_src.ls()
+    >>> import pash
+    >>> pash.ls()
     LICENSE                   README.md                 __pycache__               
     build                     dist                      htmlcov                   
-    pash.egg-info             pash_src                  run_tests.py              
-    setup.py                  src                       tests   
+    ls.py                     pash                      pash.egg-info             
+    run_tests.py              setup.py                  src                       
+    tests 
