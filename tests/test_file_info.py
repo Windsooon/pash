@@ -6,6 +6,7 @@ from file_info import FileInfo
 
 class FileInfoTestCase(unittest.TestCase):
 
+    @patch('os.path.isdir')
     @patch('os.path.basename')
     @patch('os.path.getmtime')
     @patch('grp.getgrgid')
@@ -16,7 +17,7 @@ class FileInfoTestCase(unittest.TestCase):
             self, list_dir,
             stat, pwuid,
             grgid, getmtime,
-            basename):
+            basename, isdir):
         full_path = os.path.abspath(__file__)
         list_dir.return_value = ['first.txt', '.second.txt', 'third.py']
         # 33206
@@ -26,9 +27,11 @@ class FileInfoTestCase(unittest.TestCase):
         grgid.return_value.gr_name = 'Group'
         getmtime.return_value = 1539587180.8723469
         basename.return_value = 'file.txt'
+        isdir.return_value = False
 
         self.file = FileInfo(full_path)
         self.permission = self.file.permission
+        self.link = self.file.link
         self.owner = self.file.owner
         self.group = self.file.group
         self.size = self.file.size
@@ -38,6 +41,20 @@ class FileInfoTestCase(unittest.TestCase):
     def test_permission(self):
         # Default permission is 644
         self.assertEqual('-rw-r--r--', self.permission)
+
+    @patch('os.path.isdir')
+    @patch('os.listdir')
+    def test_link(self, listdir, isdir):
+        isdir.return_value = False
+        full_path = os.path.abspath(__file__)
+        self.file = FileInfo(full_path)
+        listdir.return_value = ['first.txt', '.second.txt', 'third.py']
+        self.link = self.file.link
+        self.assertEqual(1, self.link)
+        isdir.return_value = True
+        self.file = FileInfo(full_path)
+        self.link = self.file.link
+        self.assertEqual(5, self.link)
 
     def test_owner(self):
         self.assertEqual('Owner', self.owner)
