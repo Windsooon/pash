@@ -2,8 +2,8 @@ import os
 import shutil
 import unittest
 from unittest.mock import MagicMock
-from arg_parse import parser
-from List import LS
+from pash_src.arg_parse import parser
+from pash_src.ls_class import LS
 
 
 class LsFunctionTestCase(unittest.TestCase):
