@@ -22,3 +22,14 @@ Implement Bash ls command using Python
       -a          do not ignore entries starting with .
       -S          sort by file size
       -R          list subdirectories recursively
+
+## API
+
+    pip3 install pash
+
+    >>> import pash_src
+    >>> pash_src.ls()
+    LICENSE                   README.md                 __pycache__               
+    build                     dist                      htmlcov                   
+    pash.egg-info             pash_src                  run_tests.py              
+    setup.py                  src                       tests   
