@@ -1,4 +1,5 @@
 # pash
+![travis](https://travis-ci.org/Windsooon/pash.svg?branch=master)
 Implement Bash ls command using Python
 
 ## Quickstart
@@ -6,18 +7,18 @@ Implement Bash ls command using Python
     git@github.com:Windsooon/pash.git
     cd pash
     python3 ls.py -lS
-    # Examples
+    # Other Examples
     python3 ls.py -p path_location -l
     python3 ls.py -lSaR
 
 ## Usage
-usage: ls.py [-h] [-p PATH] [-l] [-a] [-S] [-R]
 
-optional arguments:
-  -h, --help  show this help message and exit
-  -p PATH     Spectify the path
-  -l          use a long listing format
-  -a          do not ignore entries starting with .
-  -S          sort by file size
-  -R          list subdirectories recursively
+    usage: ls.py [-h] [-p PATH] [-l] [-a] [-S] [-R]
 
+    optional arguments:
+      -h, --help  show this help message and exit
+      -p PATH     Spectify the path
+      -l          use a long listing format
+      -a          do not ignore entries starting with .
+      -S          sort by file size
+      -R          list subdirectories recursively
