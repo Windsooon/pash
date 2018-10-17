@@ -1,6 +1,6 @@
 import unittest
 import os
-from pash_src.arg_parse import parser, args
+from pash.arg_parse import parser, args
 
 
 class ParseTestCase(unittest.TestCase):

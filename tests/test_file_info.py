@@ -1,7 +1,7 @@
 import os
 import unittest
 from unittest.mock import patch
-from pash_src.file_info import FileInfo
+from pash.file_info import FileInfo
 
 
 class FileInfoTestCase(unittest.TestCase):
