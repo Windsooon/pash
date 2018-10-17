@@ -1,5 +1,5 @@
 from arg_parse import args
-from List import LS
+from ls_class import LS
 
 # Get args
 ls = LS(args)

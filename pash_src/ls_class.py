@@ -1,5 +1,5 @@
 import os
-from file_info import FileInfo
+from .file_info import FileInfo
 
 
 class LS:
