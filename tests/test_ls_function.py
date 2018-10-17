@@ -79,3 +79,42 @@ class LsFunctionTestCase(unittest.TestCase):
             ['big.txt', 'a_small.txt', '.hidden.txt', '.', '..'],
             self.ls._show_hidden_files(
                 self.path))
+
+    def test_list_subdir_or_not(self):
+        args = parser.parse_args(['-p', self.path, '-R'])
+        return_lst = (self.path, ['a_small.txt', 'big.txt'])
+        self.ls = LS(args)
+        for gen in self.ls._list_subdir(self.path):
+            self.assertEqual(
+                gen, return_lst)
+
+    def test_list_subdir_show_hidden(self):
+        args = parser.parse_args(['-p', self.path, '-R', '-a'])
+        return_lst = (
+            self.path,
+            ['.', '..', '.hidden.txt',
+                'a_small.txt', 'big.txt'])
+        self.ls = LS(args)
+        for gen in self.ls._list_subdir(self.path):
+            self.assertEqual(
+                gen, return_lst)
+
+    def test_list_subdir_and_sort(self):
+        args = parser.parse_args(['-p', self.path, '-R', '-S'])
+        return_lst = (
+            self.path,
+            ['big.txt', 'a_small.txt'])
+        self.ls = LS(args)
+        for gen in self.ls._list_subdir(self.path):
+            self.assertEqual(
+                gen, return_lst)
+
+    def test_list_subdir_and_sort_and_show_hidden(self):
+        args = parser.parse_args(['-p', self.path, '-R', '-S', '-a'])
+        return_lst = (
+            self.path,
+            ['..', '.', '.hidden.txt', 'big.txt', 'a_small.txt'])
+        self.ls = LS(args)
+        for gen in self.ls._list_subdir(self.path):
+            self.assertEqual(
+                gen, return_lst)
