@@ -35,3 +35,10 @@ Implement Bash ls command using Python
     ls.py                     pash                      pash.egg-info             
     run_tests.py              setup.py                  src                       
     tests 
+
+    >>> pash.ls(show_hidden=True)
+    ...
+
+    >>> pash.ls(show_hidden=True, long_format=True)
+    ...
+
